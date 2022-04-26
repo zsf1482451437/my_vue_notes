@@ -3,5 +3,5 @@ module.exports = {
   mainBranch: 'main',  // your default branch. default 'main'
   dirPath: './src/',  //  the dir where you want to gengerate the toc. default '.'
   mdPath: './README.md',  // the markdown  file path.  default 'README.md'
-  excludes: ['.git', '.assets', '.png']  // the excludes file name or dir name
+  excludes: ['.git','.png']  // the excludes file name or dir name
 }
