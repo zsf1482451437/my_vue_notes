@@ -315,7 +315,7 @@ app.directive('format-time',{
 
 
 
-# 3 v-bind
+# 3 数据绑定v-bind
 
 **v-bind:class，语法糖-->:class**
 
@@ -430,7 +430,7 @@ methods: {
 
 
 
-# 4 计算属性
+# 4 计算属性computed
 
 当数据**需要经过处理再显示**时，需要用到计算属性
 
@@ -540,7 +540,7 @@ computed: {
 </body>
 ```
 
-# 4.侦听器
+# 5 侦听器watch
 
 Vue 提供了一种更通用的方式来**观察和响应**当前活动的实例上的**数据变动**：**侦听属性(watch)**。
 
@@ -573,7 +573,7 @@ methods: {
 
 当触发某个事件执行**changeInfoName()**时，改变**info**成员**name**的值，**watch**监听不到，所以控制台没打印。
 
-## 深度侦听
+## 5.1 深度侦听
 
 **但是要是有这需求呢？**
 
@@ -620,7 +620,7 @@ watch: {
 
 但是这种方式在vue3官方文档上已经看不到了。
 
-## 立即执行
+## 5.2 立即执行
 
 当如果需要页面渲染后，不管数据有没有发生改变，都要执行一次侦听器，这时就需要用到**immediate**属性了
 
@@ -638,96 +638,70 @@ watch: {
 
 
 
-# 5.事件监听
+# 6 事件监听v-on
 
-**v-on:click，语法糖--@click**
+**v-on:click，语法糖@click**
 
-## v-on的参数传递问题--掌握
+## 6.1 参数传递
 
-- 1.事件调用的方法可以没有小括号（定义方法时没给参数）
-- 2.函数定义的时候需要参数，但是事件调用的时候没有小括号()，vue会默认将浏览器产生的event事件对象作为参数传入方法中
-- 3.方法定义时，我们需要event对象，同时又需要其它参数
+1.事件绑定的方法可以不带小括号（如果不需要参数）；
+
+2.函数定义的时候需要参数，但是事件触发时绑定的函数没有()，vue会默认将浏览器产生的**event**事件对象作为参数传入方法中；
+
+3.需要**event对象**，同时又需要**其它参数**,这是需要手动传入$event;
 
 ```html
-<body>
-    <!-- 被vm实例所控制的区域 -->
-    <div id="app">
-        <!-- 1.事件调用的方法可以没有小括号（定义方法时没给参数） -->
-        <button @click="btn1Click()">按钮1</button>
-        <button @click="btn1Click">按钮1</button>
-        <!-- 2.函数定义的时候需要参数，但是事件调用的时候没有小括号()，vue会默认将浏览器产生的event事件对象作为参数传入方法中 -->
-        <button @click="btn2Click">按钮2</button>
-        <!-- 3.方法定义时，我们需要event对象，同时又需要其它参数 -->
-        <!-- 在调用方法时，如何手动地获取到浏览器参数的event对象：$event -->
-        <button @click="btn3Click(abc, $event)">按钮3</button>
-    </div>
-    <script src="./js/vue_2.5.22.js"></script>
-    <script>
-        // 创建vm实例对象
-        const vm = new Vue({
-            // 指定所控制的区域
-            el: '#app',
-            data: {},
-            methods: {
-                btn1Click () {
-                    console.log(123);
-                },
-                btn2Click (name) {
-                    console.log(name);
-                },
-                btn3Click (abc, event) {
-                    console.log(abc, event);
-                }
-            }
-        })
-    </script>
-</body>
+<button @click="btn1Click">按钮1</button>
+<button @click="btn2Click">按钮2</button>
+<button @click="btn3Click(abc, $event)">按钮3</button>
 ```
 
-## v-on的修饰符--掌握
+```js
+methods: {
+    btn1Click () {
+        console.log(123);
+    },
+    btn2Click (name) {
+        console.log(name);
+    },
+    btn3Click (abc, event) {
+        console.log(abc, event);
+    }
+}
+```
 
-- .stop的使用---防止事件冒泡
-- .prevent的使用---防止事件的默认行为，如表单submit的默认行为
+
+
+## 6.2 修饰符
+
+- .stop的使用---防止**事件冒泡**
+- .prevent的使用---防止事件的**默认行为**，如表单submit的默认行为
 - .enter的使用---当输入回车才会触发事件（其它特殊键帽类似）
-- .once的基本使用---只触发一次回调
+- .once的基本使用---只触发**一次回调**
 
 ```html
-<body>
-    <!-- 被vm实例所控制的区域 -->
-    <div id="app">
-        <!-- .stop的使用---防止事件冒泡 -->
-        <div @click="divClick()">
-            12345
-            <button @click.stop="btnClick()">点击</button>
-        </div>
-        <!-- 其它修饰符 -->
-        <!-- .prevent的使用---防止事件的默认行为，如表单submit的默认行为 -->
-        <!-- .enter的使用---当输入回车才会触发事件（其它特殊键帽类似） -->
-        <!-- .once的基本使用---只触发一次回调 -->
-    </div>
-    <script src="./js/vue_2.5.22.js"></script>
-    <script>
-        // 创建vm实例对象
-        const vm = new Vue({
-            // 指定所控制的区域
-            el: '#app',
-            data: {},
-            methods: {
-                divClick () {
-                    console.log('div');
-                },
-                btnClick () {
-                    console.log('btn');
-                }
-            }
-        })
-    </script>
-</body>
+<div @click="divClick()">
+    12345
+    <button @click.stop="btnClick()">点击</button>
+</div>
 ```
 
-# 6.v-model
+```js
+methods: {
+    divClick () {
+        console.log('div');
+    },
+    btnClick () {
+        console.log('btn');
+    }
+}
+```
 
-## 原理
+
+
+# 7 双向数据绑定v-model
+
+## 7.1 原理
 
 v-model背后有两个操作：
 
@@ -744,7 +718,7 @@ v-model背后有两个操作：
 <input v-bind='msg' v-on='msg = $event.target.value'>
 ```
 
-## 应用场景
+## 7.2 应用场景
 
 **表单**
 
@@ -767,7 +741,7 @@ v-model背后有两个操作：
     <label for="tennis">
       <input type="checkbox" name="" id="tennis" v-model="hobbies" value="tennis">网球
     </label>
-  </form>
+</form>
 ```
 
 **radio**
@@ -785,7 +759,7 @@ v-model背后有两个操作：
 
 sellect同理
 
-## 修饰符
+## 7.3 修饰符
 
 由于v-model是集成了v-bind和v-on，所以他也有修饰符
 
@@ -809,71 +783,65 @@ sellect同理
 
 去空格。。。
 
-# 7.条件判断
+# 8 条件判断v-if
 
-## 条件渲染的案例--登陆切换--掌握
-
-```html
-<body>
-    <!-- 被vm实例所控制的区域 -->
-    <div id="app">
-        <span v-if="isUssr">
-            <label for="username">用户账号</label>
-            <input type="text" id="uername" placeholder="用户账号">
-        </span>
-        <span v-else>
-            <label for="email">用户邮箱</label>
-            <input type="text" id="email" placeholder="用户邮箱">
-        </span>
-        <button @click="isUssr = !isUssr">切换类型</button>
-    </div>
-    <script src="./js/vue_2.5.22.js"></script>
-    <script>
-        // 创建vm实例对象
-        const vm = new Vue({
-            // 指定所控制的区域
-            el: '#app',
-            data: {
-                isUssr: true
-            }
-        })
-    </script>
-</body>
-```
-
-## v-show 和 v-if的区别
-
-- v-show本质就是标签display设置为none，控制隐藏
-  - v-show只编译一次，后面其实就是控制css，**而v-if不停的销毁和创建**，故v-show性能更好一点。
-- v-if是动态的向DOM树内添加或者删除DOM元素
-  - v-if切换有一个局部编译/卸载的过程，切换过程中合适地销毁和重建内部的事件监听和子组件
-
-# 8.遍历循环
-
-
+## 8.1 案例--登陆切换
 
 ```html
-<body>
-    <!-- 被vm实例所控制的区域 -->
-    <div id="app">
-        <!-- key不要绑定index，对性能没什么帮助 -->
-        <li v-for="item in list" :key="item">{{ item }}</li>
-    </div>
-    <script src="./js/vue_2.5.22.js"></script>
-    <script>
-        // 创建vm实例对象
-        const vm = new Vue({
-            // 指定所控制的区域
-            el: '#app',
-            data: {
-                list: [1,2,3,4,5]
-            }
-        })
-    </script>
-</body>
+<span v-if="isUssr">
+    <label for="username">用户账号</label>
+    <input type="text" id="uername" placeholder="用户账号">
+</span>
+<span v-else>
+    <label for="email">用户邮箱</label>
+    <input type="text" id="email" placeholder="用户邮箱">
+</span>
+<button @click="isUssr = !isUssr">切换类型</button>
 ```
 
-## v-for中key有什么作用？
+```js
+data() {
+    return {
+        isUser: true
+    }
+}
+```
+
+
+
+## 8.2 v-show 和 v-if的区别
+
+**v-if **确保在切换过程中条件块内的事件监听器和子组件**适当地被销毁和重建**。;
+
+**v-if** 也是**惰性的**：如果在初始渲染时条件为假，则什么也不做——直到条件第一次变为真时，才会开始渲染条件块;
+
+相比之下，**v-show** 就简单得多——不管初始条件是什么，元素**总是会被渲染**，并且只是简单地基于 **CSS的display**进行切换；
+
+注意，**v-show不支持template**；
+
+一般来说，**v-if** 有**更高的切换开销**，而 **v-show** 有**更高的初始渲染开销**；
+
+因此，如果需要非常**频繁地切换**，则使用 **v-show** 较好；
+
+如果在运行时**条件很少改变**，则使用 **v-if** 较好；
+
+# 9 遍历v-for
+
+```html
+<li v-for="item in list" :key="item">{{ item }}</li>
+```
+
+```js
+data() {
+    return {
+        list: [1,2,3,4,5]
+    }
+}
+```
+
+
+
+## 9.1 v-for中key有什么作用？
 
 - key属性主要用在Vue的**虚拟DOM的diff算法**，在**新旧nodes**对比是辨识**VNodes**
 - 如果**不使用key**，Vue会使用一种最大限度减少动态元素并且尽可能的尝试就地**修改/复用相同类型元素**的算法
@@ -958,9 +926,7 @@ VNode组成的VNode Tree
 
 源码就先到这里，我只是想举出有key和没key对性能的影响
 
-## 数组中哪些方法是是响应式的--掌握
-
-### 可以响应式的
+## 9.2 数组中响应式的方法
 
 1. push()
     `this.list.push('aaa')`
@@ -991,129 +957,42 @@ VNode组成的VNode Tree
 
   `this.list.reverse`
 
-### 不可以响应式的
+# 10 图书购物车
 
-通过索引值修改数组中元素的值
-
-`this.list[0] = 'a'`
-
-**解决方法：**
-
-1.使用splice方法
-
-`this.list.splice(0, 1, 'a')`
-
-2.使用Vue.set(要修改的对象，索引值，修改后的值)
-
-`Vue.set(this.list, 0, 'a')`
+## 10.1 结构样式初始化
 
 ```html
-<body>
-    <!-- 被vm实例所控制的区域 -->
-    <div id="app">
-        <!-- key不要绑定index，对性能没什么帮助 -->
-        <li v-for="item in list" :key="item">{{ item }}</li>
-        <button @click="change">响应式</button>
-    </div>
-    <script src="./js/vue_2.5.22.js"></script>
-    <script>
-        // 创建vm实例对象
-        const vm = new Vue({
-            // 指定所控制的区域
-            el: '#app',
-            data: {
-                list: [1,2,3,4,5]
-            },
-            methods: {
-                change () {
-                    // 可以响应式的
-                    // 1. push()
-                    // this.list.push('aaa')
-
-                    // 2. pop():删除数组最后一个
-                    // this.list.pop('aaa')
-
-                    // 3. shift():删除数组第一个
-                    // this.list.shift()
-
-                    // 4. unshift():在数组最前面添加
-                    // this.list.unshift()
-
-                    // 5.splice(): 删除/插入/替换
-                    // 第一个参数是开始位置
-                    // 删除元素：第二个参数传入你要删除几个元素（如果没有传，就删除后面的所有元素）
-                    // 替换元素：第二个参数，表示我们要替换几个元素，后面是用于替换前面的元素
-                    // 插入元素：第二个参数，传入0，并且后面跟上要插入的元素
-                    // this.list.splice(1, 3, 'a', 'b', 'c')
-
-                    // 6. sort()
-                    // this.list.sort()
-
-                    // 7. reverse()
-                    // this.list.reverse
-
-                    // 不可以响应式的
-                    // 通过索引值修改数组中元素的值
-                    // this.list[0] = 'a'
-                    // 解决方法：
-                    // 1. 使用splice方法
-                    this.list.splice(0, 1, 'a')
-                    // 2. 使用Vue.set(要修改的对象，索引值，修改后的值)
-                    // Vue.set(this.list, 0, 'a')
-                }
-            }
-        })
-    </script>
-</body>
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            <th>书籍名称</th>
+            <th>出版日期</th>
+            <th>价格</th>
+            <th>购买数量</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr v-for="item in books" :key="item">
+            <td>{{ item.id }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.date }}</td>
+            <td>{{ item.price }}</td>
+            <td>
+                <button>-</button>
+                {{ item.count }}
+                <button>+</button>
+            </td>
+            <td>移除</td>
+        </tr>
+    </tbody>
+</table>
 ```
-
-# 9.阶段案例--图书购物车
-
-## 1.结构样式初始化
-
-index.html
-
-```html
-<body>
-    <div id="app">
-        <table>
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>书籍名称</th>
-                    <th>出版日期</th>
-                    <th>价格</th>
-                    <th>购买数量</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="item in books" :key="item">
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.name }}</td>
-                    <td>{{ item.date }}</td>
-                    <td>{{ item.price }}</td>
-                    <td>
-                        <button>-</button>
-                        {{ item.count }}
-                        <button>+</button>
-                    </td>
-                    <td>移除</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <script src="./js/vue_2.5.22.js"></script>
-    <script src="main.js"></script>
-</body>
-```
-
-main.js
 
 ```js
-const app = new Vue({
-    el: '#app',
-    data: {
+data() {
+    return {
         books: [
             {
                 id: 1,
@@ -1152,10 +1031,8 @@ const app = new Vue({
             }
         ]
     }
-})
+}
 ```
-
-style.css
 
 ```css
 table {
@@ -1181,32 +1058,25 @@ th {
 
 ![image-20211109204205048](02-vue基础语法.assets/image-20211109204205048.png)
 
-## 2.解决价格小问题+在价格前面加‘￥’
+## 10.2 价格格式处理
 
-**89.00变成89了！**
+在价格前面加‘￥’；
 
-### 使用过滤器
+需要保留两位小数，**toFixed()**可以把小数点后的00显示出来；
 
-main.js+
+**使用过滤器**
 
 ```js
-const app = new Vue({
-    el: '#app',
-    data: {...},
-    filters: {
-        showPrice (price) {
-            return '￥' + price.toFixed(2)
-        }
+filters: {
+    showPrice (price) {
+        return '￥' + price.toFixed(2)
     }
-})
-// toFixed()函数可以把小数点后的00显示出来
+}
 ```
-
-index.html+
 
 价格那一栏用 `item.price | showPrice`
 
-过滤器语法：会把 `item.price` 当成参数传进 showPrice 函数
+过滤器语法：会把 `item.price` 当成参数传进 showPrice 函数，类似linux的管道
 
 ```html
 <tr v-for="item in books" :key="item.id">
@@ -1227,9 +1097,9 @@ index.html+
 
 ![image-20211109204747726](02-vue基础语法.assets/image-20211109204747726.png)
 
-## 3.加减按钮的事件
+## 10.3 加减按钮的事件
 
-### **如何保证操作的是当前书籍？**
+**如何保证操作的是当前书籍？**
 
 index.html+
 
@@ -1250,27 +1120,18 @@ v-for遍历的时候加上index参数
 </tr>
 ```
 
-main.js+
-
 ```js
-const app = new Vue({
-    el: '#app',
-    data: {
-        books: [...]
+methods: {
+    increment (index) {
+        this.books[index].count++
     },
-    methods: {
-        increment (index) {
-            this.books[index].count++
-        },
-        decrement (index) {
-            this.books[index].count--
-        }
-    },
-    filters: {...}
-})
+    decrement (index) {
+        this.books[index].count--
+    }
+}
 ```
 
-### 怎么做使书籍数量为1的时候不能减？
+**怎么做使书籍数量为1的时候不能减？**
 
 当书籍数量小于或等于1时禁用button
 
@@ -1282,9 +1143,9 @@ const app = new Vue({
 
 ![image-20211109210917588](02-vue基础语法.assets/image-20211109210917588.png)
 
-## 4.移除按钮的事件
+## 10.4 移除按钮的事件
 
-### 如何确保移除的是当前书籍？
+**如何确保移除的是当前书籍？**
 
 同上，传index
 
@@ -1293,8 +1154,6 @@ index.html+
 ```html
 <td><button @click="remove(index)">移除</button></td>
 ```
-
-main.js+
 
 ```js
 methods: {
@@ -1305,7 +1164,7 @@ methods: {
 }
 ```
 
-### 当移除完购物车，显示购物车为空怎么实现？
+**当移除完购物车，显示购物车为空怎么实现？**
 
 **用v-if和v-else**
 
@@ -1314,128 +1173,27 @@ methods: {
 ```html
 <div v-if="books.length">
     ...
-    <h2>总价格：{{  }}</h2>
 </div>
 <h2 v-else>购物车空啦</h2>
 ```
 
-## 5.计算总价
+## 10.5 计算总价
 
 **用计算属性computed + 过滤器**
 
-main.js+
-
 ```js
-const app = new Vue({
-    el: '#app',
-    data: {...},
-    methods: {...},
-    computed: {
-        totalPrice () {
-            let totalPrice = 0
-            for (let i = 0; i < this.books.length; i++) {
-                totalPrice += this.books[i].count * this.books[i].price
-            }
-            return totalPrice
+computed: {
+    totalPrice () {
+        let totalPrice = 0
+        for (let i = 0; i < this.books.length; i++) {
+            totalPrice += this.books[i].count * this.books[i].price
         }
-    },
-    filters: {...}
-})
-```
-
-index.html+
-
-```html
-<body>
-    <div id="app">
-        <div v-if="books.length">
-            ...
-            <h2>总价格：{{ totalPrice | showPrice }}</h2>
-        </div>
-        <h2 v-else>购物车空啦</h2>
-    </div>
-    <script src="./js/vue_2.5.22.js"></script>
-    <script src="main.js"></script>
-</body>
+        return totalPrice
+    }
+}
 ```
 
 **效果**
 
 ![image-20211109213310449](02-vue基础语法.assets/image-20211109213310449.png)
-
-# 10.4种遍历
-
-### 4.高阶数组方法(支持链式调用)（函数式编程）
-
-filter/map/reduce
-
-#### filter的使用
-
-返回值：boolean值
-
-true ：函数内部会自动将这次回调函数的参数n加入到**新的数组**中
-
-false：数组内部会自动过滤掉这次回调函数的参数n
-
-```js
-// 需求：取出小于100的数字
-// 10 20 40 50
-const nums[10, 20, 111, 222, 444, 40, 50]
-
-let newNums = num.filter(function (n) {
-    return n < 100
-})
-```
-
-#### map的使用
-
-```js
-// 需求: 使数组里每一个元素乘以2得到一个新数组
-// 20 40 80 100
-let new2Num = newNum.map(function (n) {
-    return n * 2
-})
-```
-
-#### reduce的使用
-
-作用：对数组中所有内容进行汇总
-
-```js
-// 需求：将新数组求和
-// new2Num 20 40 80 100
-let total = new2Num.reduce(function (preValue, n) {
-    return preValue + n
-}, 0)
-// 一开始：preValue--0，n--20
-// 第1次：preValue--0+20，n--40
-// 第2次：preValue--0+20+40，n--80
-// 第3次：preValue--0+20+40+80，n--100
-// 第4次：preValue--0+20+40+80+100
-// 240
-```
-
-**需求汇总：取出小于100的元素，并将他们*2并求和**
-
-链式调用
-
-```js
-const nums[10, 20, 111, 222, 444, 40, 50]
-
-let total = nums.filter(function (n) {
-    return n < 100
-}).map(function (n) {
-    return n * 2
-}).reduce(function (pre, n) {
-    return pre + n
-}, 0)
-```
-
-箭头函数写法
-
-```js
-const nums[10, 20, 111, 222, 444, 40, 50]
-
-let total = nums.filter(n => n < 100).map(n => n * 2).reduce((pre, n) => pre + n)
-```
 
