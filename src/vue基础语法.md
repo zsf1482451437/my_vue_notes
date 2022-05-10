@@ -496,57 +496,49 @@ computed: {
 计算属性会进行缓存，如果多次使用，计算属性只会调用一次。
 
 ```html
-<body>
-    <!-- 被vm实例所控制的区域 -->
-    <div id="app">
-        <!-- methods -->
-        <h2>{{ getFullName() }}</h2>
-        <h2>{{ getFullName() }}</h2>
-        <h2>{{ getFullName() }}</h2>
-        <h2>{{ getFullName() }}</h2>
+<!-- methods -->
+<h2>{{ getFullName() }}</h2>
+<h2>{{ getFullName() }}</h2>
+<h2>{{ getFullName() }}</h2>
+<h2>{{ getFullName() }}</h2>
 
-        <!-- 计算属性 -->
-        <h2>{{ fullName }}</h2>
-        <h2>{{ fullName }}</h2>
-        <h2>{{ fullName }}</h2>
-        <h2>{{ fullName }}</h2>
-    </div>
-    <script src="./js/vue_2.5.22.js"></script>
-    <script>
-        // 创建vm实例对象
-        const vm = new Vue({
-            // 指定所控制的区域
-            el: '#app',
-            data: {
-                firstName: 'first',
-                lastName: 'last'
-            },
-            computed: {
-                fullName: function () {
-                    // 只打印一次
-                    console.log('fullName')
-                    return this.firstName + ' ' + this.lastName
-                }
-            },
-            methods: {
-                getFullName: function () {
-                    // 每打印4次
-                    console.log('getFullName')
-                    return this.firstName + ' ' + this.lastName
-                }
-            }
-        })
-    </script>
-</body>
+<!-- 计算属性 -->
+<h2>{{ fullName }}</h2>
+<h2>{{ fullName }}</h2>
+<h2>{{ fullName }}</h2>
+<h2>{{ fullName }}</h2>
 ```
+
+```js
+data() {
+    return {
+        firstName: 'first',
+    	lastName: 'last'
+    }
+},
+computed: {
+    fullName: function () {
+        // 只打印一次
+        console.log('fullName')
+        return this.firstName + ' ' + this.lastName
+    }
+},
+methods: {
+    getFullName: function () {
+        // 每打印4次
+        console.log('getFullName')
+        return this.firstName + ' ' + this.lastName
+    }
+}
+```
+
+
 
 # 5 侦听器watch
 
 Vue 提供了一种更通用的方式来**观察和响应**当前活动的实例上的**数据变动**：**侦听属性(watch)**。
 
-当需要在数据变化时执行异步或开销较大的操作时，这个方式是最有用的。
-
-
+当需要在数据变化时执行异步或开销较大的操作时，这个方式是最有用的;
 
 默认情况下，当一个对象发生改变时可以监听到，但是**对象内部成员**发生改变则**监听不到**
 
