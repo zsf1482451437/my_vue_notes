@@ -3,4 +3,5 @@
 
 <!--filetoc-start-->
 - [vue基础语法.md](https://github.com/zsf1482451437/my_vue_notes/tree/main/src/vue基础语法.md)
+- [vue组件化开发.md](https://github.com/zsf1482451437/my_vue_notes/tree/main/src/vue组件化开发.md)
 <!--filetoc-end-->
